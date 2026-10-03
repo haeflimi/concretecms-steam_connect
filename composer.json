@@ -1,5 +1,5 @@
 {
-    "name": "haeflimi/concretecms-steam_connect",
+    "name": "haeflimi/steam_connect",
     "type": "concrete5-package",
     "require": {
         "php": ">=8",

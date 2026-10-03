@@ -1,4 +1,4 @@
-# Steam Package #
+# Steam Connect Package #
 
 This package integrates an authenticator for Valve's Steam gaming platform. It allows your website
 visitors to register and login using their Steam login, linking the c5 account with their Steam ID

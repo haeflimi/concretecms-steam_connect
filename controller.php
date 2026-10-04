@@ -9,6 +9,7 @@ use Concrete\Core\Database\EntityManager\Provider\ProviderAggregateInterface;
 use Concrete\Core\Database\EntityManager\Provider\StandardPackageProvider;
 use Concrete\Core\Package\Package;
 use SteamConnect\Command\Task\SyncSteamDataController;
+use SteamConnect\Install\LegacyPackageCleanup;
 use SteamConnect\SteamConfig;
 use Throwable;
 
@@ -18,7 +19,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'steam_connect';
     protected $appVersionRequired = '9.0.0';
-    protected $pkgVersion = '1.4.0';
+    protected $pkgVersion = '1.5.0';
     protected $pkgAutoloaderRegistries = [
         'src' => 'SteamConnect',
     ];
@@ -50,6 +51,7 @@ class Controller extends Package implements ProviderAggregateInterface
     public function install()
     {
         $pkg = parent::install();
+        $this->app->make(LegacyPackageCleanup::class)->run($pkg);
         $this->installAuthenticationType($pkg);
         $this->installContent();
 
@@ -59,6 +61,7 @@ class Controller extends Package implements ProviderAggregateInterface
     public function upgrade()
     {
         parent::upgrade();
+        $this->app->make(LegacyPackageCleanup::class)->run($this->getPackageEntity());
         $this->installAuthenticationType($this->getPackageEntity());
         $this->installContent();
         $this->migrateClubSettings();
@@ -99,7 +102,9 @@ class Controller extends Package implements ProviderAggregateInterface
 
     protected function installAuthenticationType($pkg): void
     {
-        if ($this->getAuthenticationType() === null) {
+        // Checked in the database: loading the type would need its controller, which is not available while
+        // installing (and not at all if it still belongs to a removed package)
+        if (!$this->app->make('database')->connection()->fetchOne("SELECT 1 FROM AuthenticationTypes WHERE authTypeHandle = 'steam'")) {
             // Installed disabled: it has to be enabled in /dashboard/system/registration/authentication.
             AuthenticationType::add('steam', 'Steam', 0, $pkg)->disable();
         }

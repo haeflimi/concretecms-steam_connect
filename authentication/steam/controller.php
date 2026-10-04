@@ -13,7 +13,11 @@ use Concrete\Core\User\UserInfo;
 use Concrete\Core\User\UserInfoRepository;
 use Illuminate\Support\Str;
 use LogicException;
+use Doctrine\ORM\EntityManagerInterface;
+use SteamConnect\Entity\SteamProfile;
 use SteamConnect\OpenId\SteamOpenId;
+use SteamConnect\SteamConfig;
+use SteamConnect\Sync\SteamClubSync;
 use Throwable;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -233,6 +237,9 @@ class Controller extends GenericOauthTypeController
         $config->save('auth.steam.apikey', trim((string) ($args['apikey'] ?? '')));
         $config->save('auth.steam.registration.enabled', !empty($args['registration_enabled']));
         $config->save('auth.steam.registration.group', (int) ($args['registration_group'] ?? 0));
+        $steamConfig = $this->app->make(SteamConfig::class);
+        $steamConfig->save('club_url', SteamClubSync::normalizeClubUrl((string) ($args['club_url'] ?? '')) ?? '');
+        $steamConfig->save('club_group_id', (int) ($args['club_group'] ?? 0));
     }
 
     public function edit()
@@ -245,6 +252,26 @@ class Controller extends GenericOauthTypeController
         $registrationGroupID = (int) $config->get('auth.steam.registration.group');
         $registrationGroup = $registrationGroupID === 0 ? null : $this->app->make(GroupRepository::class)->getGroupById($registrationGroupID);
         $this->set('registrationGroup', $registrationGroup === null ? null : (int) $registrationGroup->getGroupID());
+        $steamConfig = $this->app->make(SteamConfig::class);
+        $this->set('clubUrl', (string) $steamConfig->get('club_url', ''));
+        $clubGroupID = (int) $steamConfig->get('club_group_id');
+        $clubGroup = $clubGroupID === 0 ? null : $this->app->make(GroupRepository::class)->getGroupById($clubGroupID);
+        $this->set('clubGroup', $clubGroup === null ? null : (int) $clubGroup->getGroupID());
+    }
+
+    /**
+     * The cached profile of a user, null if the "Sync Steam Data" task didn't run for them yet.
+     */
+    public function getProfile(User $user): ?SteamProfile
+    {
+        $steamId = $this->getBindingForUser($user);
+
+        return $steamId === null ? null : $this->app->make(EntityManagerInterface::class)->find(SteamProfile::class, $steamId);
+    }
+
+    public function getClubUrl(): ?string
+    {
+        return $this->app->make(SteamClubSync::class)->getClubUrl();
     }
 
     protected function redirectToSteam(string $action): RedirectResponse

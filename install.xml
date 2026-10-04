@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<concrete5-cif version="1.0">
+    <blocktypes>
+        <blocktype handle="steam_leaderboard" package="steam_connect"/>
+    </blocktypes>
+    <tasks>
+        <task handle="sync_steam_data" package="steam_connect"/>
+    </tasks>
+</concrete5-cif>

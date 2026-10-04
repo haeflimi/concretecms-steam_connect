@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<schema version="0.3">
+    <table name="btSteamConnectLeaderboard">
+        <field name="bID" type="I">
+            <key/>
+            <unsigned/>
+        </field>
+        <field name="title" type="C" size="255">
+        </field>
+        <field name="leaderboard" type="C" size="32">
+            <default value="achievements"/>
+        </field>
+        <field name="period" type="C" size="16">
+            <default value="all"/>
+        </field>
+        <field name="sinceDate" type="D">
+        </field>
+        <field name="appId" type="I">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+        <field name="maxItems" type="I">
+            <unsigned/>
+            <default value="10"/>
+        </field>
+    </table>
+</schema>

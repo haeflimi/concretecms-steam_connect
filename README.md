@@ -16,6 +16,24 @@ type now.
 - Edit it, optionally enter a Steam Web API Key (used to suggest the Steam display name as username on registration), and enable it.
 - You are good to login with Steam now.
 
+## Configuration ##
+
+- **Dashboard** (System & Settings › Login & Registration › Authentication Types › Steam): Steam Web API key,
+  registration, our Steam group and the Concrete group its members are put in.
+- **Config file**: the package settings and their defaults are in `config/settings.php` (Steam group, Concrete
+  group for its members, language of achievement names). Override them in
+  `application/config/steam_connect/settings.php`, e.g.
+
+  ```php
+  <?php
+
+  return [
+      'achievement_language' => 'german',
+  ];
+  ```
+
+  Values saved in the dashboard are written to `application/config/generated_overrides/steam_connect/`.
+
 ## Features ##
 
 - Register new Users using Steam Login

@@ -8,16 +8,29 @@ defined('C5_EXECUTE') or die('Access Denied.');
  * @var string $apikey
  * @var bool $registrationEnabled
  * @var int|null $registrationGroup
+ * @var string $clubUrl
+ * @var int|null $clubGroup
  */
 ?>
 
 <div class="alert alert-info">
-    <?= t('Steam login works without any keys. A Steam Web API key is optional: it is used to suggest the Steam display name as username on registration. <a href="%s" target="_blank" rel="noopener">Click here</a> to obtain one.', 'https://steamcommunity.com/dev/apikey') ?>
+    <?= t('Steam login works without any keys. The Steam Web API key is needed by the "Sync Steam Data" task and to suggest the Steam display name as username on registration. <a href="%s" target="_blank" rel="noopener">Click here</a> to obtain one.', 'https://steamcommunity.com/dev/apikey') ?>
 </div>
 
 <div class="form-group">
     <?= $form->label('apikey', t('Steam Web API Key')) ?>
     <?= $form->password('apikey', $apikey, ['autocomplete' => 'off', 'class' => 'font-monospace', 'spellcheck' => 'false']) ?>
+</div>
+
+<div class="form-group">
+    <?= $form->label('club_url', t('Steam Group')) ?>
+    <?= $form->text('club_url', $clubUrl, ['placeholder' => 'https://steamcommunity.com/groups/...']) ?>
+    <div class="form-text"><?= t('Optional. The "Sync Steam Data" task checks which linked users are members of this group, and users who are not get a link to join it in their profile.') ?></div>
+</div>
+<div class="form-group">
+    <?= $form->label('club_group', t('Group for Steam Group members')) ?>
+    <?= $groupSelector->selectGroup('club_group', $clubGroup, tc('Group', 'None')) ?>
+    <div class="form-text"><?= t('Optional. Linked users who are members of the Steam group are added to this group, everybody else is removed from it.') ?></div>
 </div>
 
 <div class="form-group">

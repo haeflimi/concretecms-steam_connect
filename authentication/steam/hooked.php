@@ -2,8 +2,18 @@
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
-$steamId = $this->controller->getBindingForUser(app(Concrete\Core\User\User::class));
+$user = app(Concrete\Core\User\User::class);
+$steamId = $this->controller->getBindingForUser($user);
+$profile = $this->controller->getProfile($user);
+$clubUrl = $this->controller->getClubUrl();
 ?>
+
+<?php if ($clubUrl !== null && $profile !== null && $profile->isClubMember() === false) { ?>
+    <div class="alert alert-info">
+        <?= t('You are not a member of our Steam group yet.') ?>
+        <a href="<?= h($clubUrl) ?>" target="_blank" rel="noopener" class="alert-link"><?= t('Join it on Steam') ?></a>
+    </div>
+<?php } ?>
 
 <div class="form-group">
     <span><?= t('Detach your %s account', 'Steam') ?></span>

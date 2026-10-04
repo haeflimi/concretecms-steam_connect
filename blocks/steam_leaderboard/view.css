@@ -1,0 +1,132 @@
+/*
+ * Plain Bootstrap 5 look: uses the theme's Bootstrap variables, with defaults for themes that don't define them.
+ * The bar shows the size of the value in the primary colour, the text stays in body colours.
+ */
+.steam-leaderboard {
+    --sl-ink: var(--bs-body-color, #212529);
+    --sl-ink-muted: var(--bs-secondary-color, #6c757d);
+    --sl-surface: var(--bs-body-bg, #fff);
+    --sl-surface-hover: var(--bs-tertiary-bg, #f8f9fa);
+    --sl-border: var(--bs-border-color, #dee2e6);
+    --sl-hue: var(--bs-primary, #0d6efd);
+    --sl-mono: var(--bs-font-monospace, monospace);
+    --sl-radius: var(--bs-border-radius, .375rem);
+    color: var(--sl-ink);
+    background: var(--sl-surface);
+    border: 1px solid var(--sl-border);
+    border-radius: var(--sl-radius);
+    margin-bottom: 1.5rem;
+}
+.steam-leaderboard-head {
+    padding: 1rem 1rem .5rem;
+}
+.steam-leaderboard-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+.steam-leaderboard-subtitle,
+.steam-leaderboard-empty {
+    margin: .25rem 0 0;
+    color: var(--sl-ink-muted);
+    font-size: .875rem;
+}
+.steam-leaderboard-empty {
+    padding: 0 1rem 1rem;
+}
+.steam-leaderboard-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.steam-leaderboard-row {
+    display: grid;
+    grid-template-columns: 2rem 40px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .375rem .75rem;
+    padding: .5rem 1rem;
+    border-top: 1px solid var(--sl-border);
+}
+.steam-leaderboard-row:hover {
+    background: var(--sl-surface-hover);
+}
+.steam-leaderboard-rank,
+.steam-leaderboard-image {
+    grid-row: span 2;
+}
+.steam-leaderboard-rank {
+    font-family: var(--sl-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--sl-ink-muted);
+}
+.steam-leaderboard-top .steam-leaderboard-rank {
+    color: var(--sl-ink);
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+.steam-leaderboard-image {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--bs-border-radius-sm, .25rem);
+    object-fit: cover;
+}
+.steam-leaderboard-image-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sl-border);
+    color: var(--sl-ink-muted);
+    font-weight: 700;
+}
+.steam-leaderboard-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.steam-leaderboard-name {
+    color: var(--sl-ink);
+    font-weight: 600;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.steam-leaderboard-name:hover,
+.steam-leaderboard-name:focus-visible {
+    text-decoration: underline;
+}
+.steam-leaderboard-meta {
+    color: var(--sl-ink-muted);
+    font-size: .8125rem;
+}
+.steam-leaderboard-bar {
+    grid-column: 3 / -1;
+    display: block;
+    height: 6px;
+    background: var(--sl-border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.steam-leaderboard-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--sl-hue);
+    border-radius: 0 3px 3px 0;
+}
+.steam-leaderboard-value {
+    font-family: var(--sl-mono);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    text-align: right;
+}
+@media (max-width: 480px) {
+    .steam-leaderboard-row {
+        grid-template-columns: 1.5rem 32px minmax(0, 1fr) auto;
+        gap: .375rem .5rem;
+        padding: .5rem .75rem;
+    }
+    .steam-leaderboard-image {
+        width: 32px;
+        height: 32px;
+    }
+}

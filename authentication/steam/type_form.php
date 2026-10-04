@@ -1,52 +1,43 @@
-<?php defined('C5_EXECUTE') or die('Access denied.'); ?>
+<?php
+
+defined('C5_EXECUTE') or die('Access Denied.');
+
+/**
+ * @var Concrete\Core\Form\Service\Widget\GroupSelector $groupSelector
+ * @var Concrete\Core\Form\Service\Form $form
+ * @var string $apikey
+ * @var bool $registrationEnabled
+ * @var int|null $registrationGroup
+ */
+?>
 
 <div class="alert alert-info">
-    <h4><?=t('Steam Login Configuration')?></h4>
-    <?php echo t('<a href="%s" target="_blank">Click here</a> to obtain a Steam API Key.', 'http://steamcommunity.com/dev/apikey'); ?>
+    <?= t('Steam login works without any keys. A Steam Web API key is optional: it is used to suggest the Steam display name as username on registration. <a href="%s" target="_blank" rel="noopener">Click here</a> to obtain one.', 'https://steamcommunity.com/dev/apikey') ?>
 </div>
 
-<div class='form-group'>
-    <?php echo $form->label('apikey', t('Steam API Key'))?>
-    <?php echo $form->text('apikey', $apikey)?>
+<div class="form-group">
+    <?= $form->label('apikey', t('Steam Web API Key')) ?>
+    <?= $form->password('apikey', $apikey, ['autocomplete' => 'off', 'class' => 'font-monospace', 'spellcheck' => 'false']) ?>
 </div>
-<div class='form-group'>
-    <div class="input-group">
-        <label type="checkbox">
-            <input type="checkbox" name="registration_enabled" value="1" <?php echo \Config::get('auth.steam.registration.enabled', false) ? 'checked' : '' ?>>
-            <span style="font-weight:normal"><?php echo t('Allow automatic registration') ?></span>
-        </label>
-        </span>
+
+<div class="form-group">
+    <?= $form->label('', t('Registration')) ?>
+    <div class="form-check">
+        <?= $form->checkbox('registration_enabled', '1', $registrationEnabled) ?>
+        <label class="form-check-label" for="registration_enabled"><?= t('Allow automatic registration') ?></label>
     </div>
 </div>
-<div class='form-group registration-group'>
-    <label for="registration_group" class="control-label"><?php echo t('Group to enter on registration') ?></label>
-    <select name="registration_group" class="form-control">
-        <option value="0"><?php echo t("None") ?></option>
-        <?php
-        /** @var \Group $group */
-        foreach ($groups as $group) {
-            ?>
-            <option value="<?php echo $group->getGroupID() ?>" <?php echo intval($group->getGroupID(), 10) === intval(
-                \Config::get('auth.steam.registration.group', false),
-                10) ? 'selected' : '' ?>>
-                <?php echo $group->getGroupDisplayName(false) ?>
-            </option>
-        <?php
-
-        }
-        ?>
-    </select>
+<div class="form-group registration-group">
+    <?= $form->label('registration_group', t('Group to enter on registration')) ?>
+    <?= $groupSelector->selectGroup('registration_group', $registrationGroup, tc('Group', 'None')) ?>
 </div>
 
-<script type="text/javascript">
-    (function RegistrationGroup() {
-
-        var input = $('input[name="registration_enabled"]'),
-            group_div = $('div.registration-group');
-
-        input.change(function () {
-            input.get(0).checked && group_div.show() || group_div.hide();
-        }).change();
-
-    }());
+<script>
+$(function() {
+    $('input[name="registration_enabled"]')
+        .on('change', function () {
+            $('div.registration-group').toggle($(this).is(':checked'));
+        })
+        .trigger('change');
+});
 </script>

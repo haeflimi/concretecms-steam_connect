@@ -1,25 +1,28 @@
-<?php defined('C5_EXECUTE') or die('Access Denied.');
-$c = new Concrete\Package\SteamAuthentication\Authentication\Steam\Controller;?>
+<?php defined('C5_EXECUTE') or die('Access Denied.'); ?>
 
 <div class="form-group">
-    <a href="<?php echo \URL::to('/ccm/system/authentication/oauth2/steam/attempt_attach'); ?>" class="btn btn-steam strip_button">
-        <i class="fa fa-steam"></i>
-        <?php echo t('Attach a %s account', t('steam')) ?>
+    <span><?= t('Attach a %s account', 'Steam') ?></span>
+    <hr>
+</div>
+<div class="form-group">
+    <a href="<?= URL::to('/ccm/system/authentication/oauth2/steam/attempt_attach') ?>" class="btn btn-steam">
+        <i class="fab fa-steam"></i>
+        <?= t('Attach a %s account', 'Steam') ?>
     </a>
-    <span class="help-block">
-        <?=t('Connected Steam Account ID').': '.$c->getUniqueId()?>
-    </span>
 </div>
 
 <style>
-    .btn-steam {
-        color: #fff !important;
-        background: #171a21 !important;
+    .btn-steam,
+    .ccm-ui .btn-steam {
+        color: #fff;
+        background-color: #171a21;
     }
-    .btn-steam:hover {
-        background: #31343B !important;
+    .btn-steam:hover,
+    .ccm-ui .btn-steam:hover {
+        color: #fff;
+        background-color: #31343b;
     }
-    .btn-facebook .fa-steam {
+    .btn-steam .fa-steam {
         margin: 0 6px 0 3px;
     }
 </style>

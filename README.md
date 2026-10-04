@@ -1,7 +1,7 @@
 # Steam Connect Package #
 
 This package integrates an authenticator for Valve's Steam gaming platform. It allows your website
-visitors to register and login using their Steam login, linking the c5 account with their Steam ID
+visitors to register and login using their Steam login, linking the concreteCMS account with their Steam ID
 in the process.
 
 **This is NOT a official implementation by the Valve Corporation. The creator is not associated with
@@ -13,14 +13,14 @@ the Valve Corporation in any way.**
 - Install the Package via c5 Dashboard.
 - On /dashboard/system/registration/authentication Steam should be available as a Authentication
 type now.
-- Edit, enter your Steam API Key and activate it.
+- Edit it, optionally enter a Steam Web API Key (used to suggest the Steam display name as username on registration), and enable it.
 - You are good to login with Steam now.
 
 ## Features ##
 
 - Register new Users using Steam Login
 - Login existing Users using Steam Login
-- Connect Steam Account to c5 account via User Profile
+- Connect Steam Account to concreteCMS account via User Profile
 
 ## planned Features ##
 
@@ -29,8 +29,8 @@ type now.
 
 ## Prerequisites ##
 
-- concrete5 5.7.4 or higher
-- Steam API Key [Get you own Steam API Key here](https://steamcommunity.com/dev/apikey)
+- Concrete CMS 9.0 or higher, PHP 8
+- optional: Steam Web API Key [Get your own Steam API Key here](https://steamcommunity.com/dev/apikey)
 
 ## Credits ##
 

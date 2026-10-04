@@ -1,16 +1,21 @@
 <?php
+
 namespace Concrete\Package\SteamConnect;
 
-use Package,
-    Core,
-    Config,
-    Events;
+use Concrete\Core\Authentication\AuthenticationType;
+use Concrete\Core\Package\Package;
+use Throwable;
+
+defined('C5_EXECUTE') or die('Access Denied.');
 
 class Controller extends Package
 {
     protected $pkgHandle = 'steam_connect';
-    protected $appVersionRequired = '5.7.4';
-    protected $pkgVersion = '0.9';
+    protected $appVersionRequired = '9.0.0';
+    protected $pkgVersion = '1.0.0';
+    protected $pkgAutoloaderRegistries = [
+        'src' => 'SteamConnect',
+    ];
 
     public function getPackageName()
     {
@@ -22,28 +27,45 @@ class Controller extends Package
         return t('Adds an Authenticator for Valve\'s Steam gaming platform.');
     }
 
-    public function on_start()
-    {
-
-    }
-
     public function install()
     {
         $pkg = parent::install();
-        $type = \Concrete\Core\Authentication\AuthenticationType::add('steam', 'Steam', 5, $pkg);
-        if(empty(\Config::get('auth.steam.apikey'))){
-            $type->disable();
-        }
+        $this->installAuthenticationType($pkg);
+
+        return $pkg;
     }
 
     public function upgrade()
     {
         parent::upgrade();
+        $this->installAuthenticationType($this->getPackageEntity());
     }
 
-    public function uninstall(){
-        $pkg = parent::uninstall();
-        $type = \Concrete\Core\Authentication\AuthenticationType::getByHandle('steam');
-        $type->delete();
+    public function uninstall()
+    {
+        $type = $this->getAuthenticationType();
+        if ($type !== null) {
+            $type->delete();
+        }
+        parent::uninstall();
+    }
+
+    protected function installAuthenticationType($pkg): void
+    {
+        if ($this->getAuthenticationType() === null) {
+            // Installed disabled: it has to be enabled in /dashboard/system/registration/authentication.
+            AuthenticationType::add('steam', 'Steam', 0, $pkg)->disable();
+        }
+    }
+
+    protected function getAuthenticationType(): ?AuthenticationType
+    {
+        try {
+            $type = AuthenticationType::getByHandle('steam');
+        } catch (Throwable $e) {
+            return null;
+        }
+
+        return is_object($type) && !$type->isError() ? $type : null;
     }
 }

@@ -1,0 +1,418 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the steam_connect package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: steam_connect\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-09 22:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: steam_connect/controller.php:29
+msgid "Steam Connect"
+msgstr "Steam Connect"
+
+#: steam_connect/controller.php:34
+msgid "Adds an Authenticator for Valve's Steam gaming platform."
+msgstr "Fügt eine Anmeldung über Valves Gaming-Plattform Steam hinzu."
+
+#: steam_connect/authentication/steam/form.php:27
+#, php-format
+msgid "Register an account for \"%s\""
+msgstr "Konto für „%s“ registrieren"
+
+#: steam_connect/authentication/steam/form.php:29
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
+
+#: steam_connect/authentication/steam/form.php:30
+msgid "Register"
+msgstr "Registrieren"
+
+#: steam_connect/authentication/steam/form.php:41
+#, php-format
+msgid "Log in with %s"
+msgstr "Mit %s anmelden"
+
+#: steam_connect/authentication/steam/hook.php:4
+#: steam_connect/authentication/steam/hook.php:10
+#, php-format
+msgid "Attach a %s account"
+msgstr "%s-Konto verknüpfen"
+
+#: steam_connect/authentication/steam/type_form.php:17
+#, php-format
+msgid "Steam login works without any keys. The Steam Web API key is needed by the \"Sync Steam Data\" task and to suggest the Steam display name as username on registration. <a href=\"%s\" target=\"_blank\" rel=\"noopener\">Click here</a> to obtain one."
+msgstr "Die Anmeldung mit Steam funktioniert ohne Schlüssel. Der Steam Web API Key wird von der Aufgabe „Steam-Daten synchronisieren“ benötigt und um bei der Registrierung den Steam-Anzeigenamen als Benutzernamen vorzuschlagen. <a href=\"%s\" target=\"_blank\" rel=\"noopener\">Hier klicken</a>, um einen zu erhalten."
+
+#: steam_connect/authentication/steam/type_form.php:21
+msgid "Steam Web API Key"
+msgstr "Steam Web API Key"
+
+#: steam_connect/authentication/steam/type_form.php:26
+msgid "Steam Group"
+msgstr "Steam-Gruppe"
+
+#: steam_connect/authentication/steam/type_form.php:28
+msgid "Optional. The \"Sync Steam Data\" task checks which linked users are members of this group, and users who are not get a link to join it in their profile."
+msgstr "Optional. Die Aufgabe „Steam-Daten synchronisieren“ prüft, welche verknüpften Benutzer Mitglied dieser Gruppe sind; wer es nicht ist, erhält in seinem Profil einen Link zum Beitreten."
+
+#: steam_connect/authentication/steam/type_form.php:31
+msgid "Group for Steam Group members"
+msgstr "Benutzergruppe für Mitglieder der Steam-Gruppe"
+
+#: steam_connect/authentication/steam/type_form.php:32
+#: steam_connect/authentication/steam/type_form.php:45
+msgctxt "Group"
+msgid "None"
+msgstr "Keine"
+
+#: steam_connect/authentication/steam/type_form.php:33
+msgid "Optional. Linked users who are members of the Steam group are added to this group, everybody else is removed from it."
+msgstr "Optional. Verknüpfte Benutzer, die Mitglied der Steam-Gruppe sind, werden dieser Benutzergruppe hinzugefügt, alle anderen daraus entfernt."
+
+#: steam_connect/authentication/steam/type_form.php:37
+msgid "Registration"
+msgstr "Registrierung"
+
+#: steam_connect/authentication/steam/type_form.php:40
+msgid "Allow automatic registration"
+msgstr "Automatische Registrierung erlauben"
+
+#: steam_connect/authentication/steam/type_form.php:44
+msgid "Group to enter on registration"
+msgstr "Benutzergruppe bei der Registrierung"
+
+#: steam_connect/authentication/steam/hooked.php:13
+msgid "You are not a member of our Steam group yet."
+msgstr "Du bist noch nicht Mitglied unserer Steam-Gruppe."
+
+#: steam_connect/authentication/steam/hooked.php:14
+msgid "Join it on Steam"
+msgstr "Auf Steam beitreten"
+
+#: steam_connect/authentication/steam/hooked.php:19
+#: steam_connect/authentication/steam/hooked.php:25
+#, php-format
+msgid "Detach your %s account"
+msgstr "Verknüpfung mit deinem %s-Konto lösen"
+
+#: steam_connect/authentication/steam/hooked.php:29
+#, php-format
+msgid "Connected Steam account: %s"
+msgstr "Verknüpftes Steam-Konto: %s"
+
+#: steam_connect/authentication/steam/controller.php:84
+#: steam_connect/authentication/steam/controller.php:93
+msgid "You are already logged in."
+msgstr "Du bist bereits angemeldet."
+
+#: steam_connect/authentication/steam/controller.php:98
+#: steam_connect/authentication/steam/controller.php:203
+msgid "Steam authentication failed. Please try again."
+msgstr "Die Anmeldung mit Steam ist fehlgeschlagen. Bitte versuche es erneut."
+
+#: steam_connect/authentication/steam/controller.php:105
+#: steam_connect/authentication/steam/controller.php:117
+msgid "Failed to complete authentication."
+msgstr "Die Anmeldung konnte nicht abgeschlossen werden."
+
+#: steam_connect/authentication/steam/controller.php:112
+msgid "This account has not yet been validated. Please check the email associated with this account and follow the link it contains."
+msgstr "Dieses Konto wurde noch nicht bestätigt. Bitte prüfe die E-Mails an die Adresse dieses Kontos und folge dem enthaltenen Link."
+
+#: steam_connect/authentication/steam/controller.php:135
+msgid "No local user account is associated with this Steam account. Please log in with a local account and connect your Steam account from your user profile."
+msgstr "Mit diesem Steam-Konto ist kein lokales Benutzerkonto verknüpft. Bitte melde dich mit einem lokalen Konto an und verknüpfe dein Steam-Konto in deinem Profil."
+
+#: steam_connect/authentication/steam/controller.php:146
+msgid "Your registration session has expired. Please sign in with Steam again."
+msgstr "Deine Registrierungssitzung ist abgelaufen. Bitte melde dich erneut mit Steam an."
+
+#: steam_connect/authentication/steam/controller.php:161
+msgid "Please enter a valid email address."
+msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
+
+#: steam_connect/authentication/steam/controller.php:166
+msgid "A user account already exists for this email, please log in and attach your Steam account from your account page."
+msgstr "Für diese E-Mail-Adresse gibt es bereits ein Benutzerkonto. Bitte melde dich an und verknüpfe dein Steam-Konto auf deiner Kontoseite."
+
+#: steam_connect/authentication/steam/controller.php:175
+msgid "Unable to create new account."
+msgstr "Das neue Konto konnte nicht erstellt werden."
+
+#: steam_connect/authentication/steam/controller.php:182
+#, php-format
+msgid "Your account has been created. We sent an email to %s: click on the link it contains to confirm your email address, then you can log in with Steam."
+msgstr "Dein Konto wurde erstellt. Wir haben eine E-Mail an %s geschickt: Klicke auf den enthaltenen Link, um deine E-Mail-Adresse zu bestätigen. Danach kannst du dich mit Steam anmelden."
+
+#: steam_connect/authentication/steam/controller.php:188
+msgid "A user must be logged in to attach a Steam account."
+msgstr "Um ein Steam-Konto zu verknüpfen, musst du angemeldet sein."
+
+#: steam_connect/authentication/steam/controller.php:209
+msgid "Unable to attach user."
+msgstr "Das Konto konnte nicht verknüpft werden."
+
+#: steam_connect/authentication/steam/controller.php:212
+msgid "Successfully attached."
+msgstr "Erfolgreich verknüpft."
+
+#: steam_connect/authentication/steam/controller.php:227
+msgid "Unable to detach account."
+msgstr "Die Verknüpfung konnte nicht gelöst werden."
+
+#: steam_connect/authentication/steam/controller.php:231
+msgid "Successfully detached."
+msgstr "Verknüpfung erfolgreich gelöst."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:43
+msgid "Steam Leaderboard"
+msgstr "Steam-Rangliste"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:48
+msgid "Achievement leaderboard and most played / most owned games of the users who linked their Steam account."
+msgstr "Erfolgs-Rangliste sowie meistgespielte / am häufigsten besessene Spiele der Benutzer, die ihr Steam-Konto verknüpft haben."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:71
+msgid "Please choose a leaderboard."
+msgstr "Bitte wähle eine Rangliste."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:74
+msgid "Please enter the start date."
+msgstr "Bitte gib das Startdatum ein."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:107
+#, php-format
+msgid "%s perfect game"
+msgid_plural "%s perfect games"
+msgstr[0] "%s perfektes Spiel"
+msgstr[1] "%s perfekte Spiele"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:117
+#, php-format
+msgid "%s player"
+msgid_plural "%s players"
+msgstr[0] "%s Spieler"
+msgstr[1] "%s Spieler"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:130
+#, php-format
+msgid "%s of %s"
+msgstr "%s von %s"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:131
+#, php-format
+msgid "%s played in total"
+msgstr "%s insgesamt gespielt"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:143
+#, php-format
+msgid "%s pts"
+msgstr "%s Pkt."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:144
+#, php-format
+msgid "%s achievement"
+msgid_plural "%s achievements"
+msgstr[0] "%s Erfolg"
+msgstr[1] "%s Erfolge"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:167
+#, php-format
+msgid "Since %s"
+msgstr "Seit %s"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:294
+#, php-format
+msgid "%s min"
+msgstr "%s Min."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:297
+#, php-format
+msgid "%s h"
+msgstr "%s Std."
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:311
+msgid "All games"
+msgstr "Alle Spiele"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:317
+msgid "Achievement Leaderboard"
+msgstr "Erfolgs-Rangliste"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:318
+msgid "Perfect Games (all achievements unlocked)"
+msgstr "Perfekte Spiele (alle Erfolge freigeschaltet)"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:319
+msgid "Most Played Games"
+msgstr "Meistgespielte Spiele"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:320
+msgid "Most Owned Games"
+msgstr "Am häufigsten besessene Spiele"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:327
+msgid "All time"
+msgstr "Gesamter Zeitraum"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:328
+msgid "Last 2 weeks"
+msgstr "Letzte 2 Wochen"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:329
+msgid "Last 30 days"
+msgstr "Letzte 30 Tage"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:330
+msgid "Last 90 days"
+msgstr "Letzte 90 Tage"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:331
+msgid "Last 12 months"
+msgstr "Letzte 12 Monate"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php:332
+msgid "Since a date"
+msgstr "Seit einem Datum"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:19
+msgid "Leaderboard"
+msgstr "Rangliste"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:23
+msgid "Title"
+msgstr "Titel"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:24
+msgid "Name of the leaderboard"
+msgstr "Name der Rangliste"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:27
+msgid "Game"
+msgstr "Spiel"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:29
+msgid "Only games in which somebody unlocked an achievement are listed."
+msgstr "Es werden nur Spiele aufgeführt, in denen jemand einen Erfolg freigeschaltet hat."
+
+#: steam_connect/blocks/steam_leaderboard/form.php:32
+msgid "Period"
+msgstr "Zeitraum"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:34
+msgid "Playtime of other periods than \"All time\" and \"Last 2 weeks\" is calculated from the data collected by the Sync Steam Data task, so it only covers the time since its first run."
+msgstr "Die Spielzeit anderer Zeiträume als „Gesamter Zeitraum“ und „Letzte 2 Wochen“ wird aus den Daten berechnet, die die Aufgabe „Steam-Daten synchronisieren“ sammelt; sie deckt also nur die Zeit seit ihrer ersten Ausführung ab."
+
+#: steam_connect/blocks/steam_leaderboard/form.php:37
+msgid "Start date"
+msgstr "Startdatum"
+
+#: steam_connect/blocks/steam_leaderboard/form.php:39
+msgid "E.g. the first day of a LAN party."
+msgstr "Z. B. der erste Tag einer LAN-Party."
+
+#: steam_connect/blocks/steam_leaderboard/form.php:42
+msgid "Number of entries"
+msgstr "Anzahl Einträge"
+
+#: steam_connect/blocks/steam_leaderboard/view.php:24
+msgid "No data yet."
+msgstr "Noch keine Daten."
+
+#: steam_connect/src/Sync/SteamAchievementSync.php:68
+#, php-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: steam_connect/src/Sync/SteamAchievementSync.php:73
+#, php-format
+msgid "%s: %s of %s achievements"
+msgstr "%s: %s von %s Erfolgen"
+
+#: steam_connect/src/Sync/SteamDataSync.php:93
+#, php-format
+msgid "%s (user %s): game details are private"
+msgstr "%s (Benutzer %s): Spieldetails sind privat"
+
+#: steam_connect/src/Sync/SteamDataSync.php:94
+#, php-format
+msgid "%s (user %s): %s games"
+msgstr "%s (Benutzer %s): %s Spiele"
+
+#: steam_connect/src/Sync/SteamDataSync.php:100
+#, php-format
+msgid "%s (user %s): %s"
+msgstr "%s (Benutzer %s): %s"
+
+#: steam_connect/src/Sync/SteamClubSync.php:88
+#, php-format
+msgid "The Steam group has %s members."
+msgstr "Die Steam-Gruppe hat %s Mitglieder."
+
+#: steam_connect/src/Sync/SteamClubSync.php:99
+#, php-format
+msgid "%s of %s linked users are members of the Steam group."
+msgstr "%s von %s verknüpften Benutzern sind Mitglied der Steam-Gruppe."
+
+#: steam_connect/src/Sync/SteamClubSync.php:121
+#, php-format
+msgid "The Steam group has more than %s members, which is not supported."
+msgstr "Die Steam-Gruppe hat mehr als %s Mitglieder, das wird nicht unterstützt."
+
+#: steam_connect/src/Sync/SteamClubSync.php:132
+#, php-format
+msgid "Unable to read the members of the Steam group: %s"
+msgstr "Die Mitglieder der Steam-Gruppe konnten nicht gelesen werden: %s"
+
+#: steam_connect/src/Sync/SteamClubSync.php:138
+#, php-format
+msgid "The Steam group %s was not found or its member list is not public."
+msgstr "Die Steam-Gruppe %s wurde nicht gefunden oder ihre Mitgliederliste ist nicht öffentlich."
+
+#: steam_connect/src/Sync/SteamClubSync.php:170
+#, php-format
+msgid "Group \"%s\": %s added, %s removed."
+msgstr "Benutzergruppe „%s“: %s hinzugefügt, %s entfernt."
+
+#: steam_connect/src/Command/PruneSteamDataCommandHandler.php:23
+#, php-format
+msgid "Removed the data of %s unlinked Steam accounts."
+msgstr "Die Daten von %s nicht mehr verknüpften Steam-Konten wurden entfernt."
+
+#: steam_connect/src/Command/SyncSteamAchievementsCommandHandler.php:28
+#, php-format
+msgid "%s: achievements are up to date."
+msgstr "%s: Erfolge sind aktuell."
+
+#: steam_connect/src/Install/LegacyPackageCleanup.php:61
+#, php-format
+msgid "Steam Connect replaced the old package(s) %s and took over %s linked Steam accounts and the settings. The folder(s) %s can be deleted."
+msgstr "Steam Connect hat das bzw. die alten Pakete %s ersetzt und %s verknüpfte Steam-Konten sowie die Einstellungen übernommen. Der bzw. die Ordner %s können gelöscht werden."
+
+#: steam_connect/src/Command/Task/SyncSteamDataController.php:43
+#: steam_connect/src/Command/Task/SyncSteamDataController.php:63
+msgid "Sync Steam Data"
+msgstr "Steam-Daten synchronisieren"
+
+#: steam_connect/src/Command/Task/SyncSteamDataController.php:48
+msgid "Stores the Steam profile, bans, owned games, playtime, achievements and Steam group membership of all users who linked their Steam account."
+msgstr "Speichert Steam-Profil, Sperren, besessene Spiele, Spielzeit, Erfolge und Steam-Gruppenmitgliedschaft aller Benutzer, die ihr Steam-Konto verknüpft haben."
+
+#: steam_connect/src/Command/Task/SyncSteamDataController.php:59
+msgid "Please configure a Steam Web API key in the Steam authentication type first."
+msgstr "Bitte konfiguriere zuerst einen Steam Web API Key im Steam-Anmeldetyp."
+
+#: steam_connect/src/Command/Task/SyncSteamDataController.php:76
+msgid "Syncing Steam data..."
+msgstr "Steam-Daten werden synchronisiert …"

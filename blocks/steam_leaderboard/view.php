@@ -5,7 +5,7 @@ defined('C5_EXECUTE') or die('Access Denied.');
 /**
  * @var string $heading
  * @var string $subtitle
- * @var array[] $rows rank, name, url, image, value, valueLabel, meta; game rows also appId, header (store capsule image), players (name, image, initials, label, hue), playerCount
+ * @var array[] $rows rank, name, url, image, value, valueLabel, meta; game rows also appId, header (store capsule image), players (name, image, initials, label, hue), playerCount, roster (name, time; up to 30)
  */
 
 $max = $rows ? max(array_column($rows, 'value')) : 0;

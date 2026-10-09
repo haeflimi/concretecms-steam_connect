@@ -240,6 +240,7 @@ class Controller extends BlockController
                 'meta' => $meta,
                 'players' => $this->faces($players[(int) $game['appId']] ?? []),
                 'playerCount' => count($players[(int) $game['appId']] ?? []),
+                'roster' => $this->roster($players[(int) $game['appId']] ?? []),
             ];
         }
 
@@ -270,6 +271,21 @@ class Controller extends BlockController
         }
 
         return $faces;
+    }
+
+    /**
+     * Everybody who played a game with their playtime, most first (for a list on hover).
+     *
+     * @return array[] name, time
+     */
+    protected function roster(array $players, int $max = 30): array
+    {
+        $roster = [];
+        foreach (array_slice($players, 0, $max) as $player) {
+            $roster[] = ['name' => (string) ($player['userName'] ?: $player['steamName']), 'time' => $this->formatPlaytime((int) $player['minutes'])];
+        }
+
+        return $roster;
     }
 
     protected function formatPlaytime(int $minutes): string

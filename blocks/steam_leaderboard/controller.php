@@ -3,6 +3,7 @@
 namespace Concrete\Package\SteamConnect\Block\SteamLeaderboard;
 
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\User\UserInfoRepository;
 use DateTime;
 use DateTimeInterface;
 use SteamConnect\Entity\SteamApp;
@@ -114,7 +115,8 @@ class Controller extends BlockController
                     'minutes',
                     function ($row) use ($numbers) {
                         return [$this->formatPlaytime((int) $row['minutes']), t2('%s player', '%s players', (int) $row['players'], $numbers->format($row['players']))];
-                    }
+                    },
+                    $period
                 );
                 break;
             case 'most_owned':
@@ -128,7 +130,8 @@ class Controller extends BlockController
                             t('%s of %s', $numbers->format($row['owners']), $numbers->format($libraries)),
                             t('%s played in total', $this->formatPlaytime((int) $row['minutes'])),
                         ];
-                    }
+                    },
+                    'all'
                 );
                 break;
             default:
@@ -211,9 +214,11 @@ class Controller extends BlockController
 
     /**
      * @param callable $labels returns [value label, meta text] for a row
+     * @param string|DateTimeInterface|null $playersPeriod adds the faces of who played the game in that period
      */
-    protected function gameRows(array $games, string $valueColumn, callable $labels): array
+    protected function gameRows(array $games, string $valueColumn, callable $labels, $playersPeriod = null): array
     {
+        $players = $playersPeriod === null ? [] : $this->app->make(GameStatistics::class)->getPlayers(array_column($games, 'appId'), $playersPeriod);
         $rows = [];
         $rank = 0;
         $previous = null;
@@ -226,15 +231,45 @@ class Controller extends BlockController
             $rows[] = [
                 'rank' => $rank,
                 'name' => (string) $game['name'],
+                'appId' => (int) $game['appId'],
                 'url' => SteamApp::buildStoreUrl((int) $game['appId']),
                 'image' => SteamApp::buildIconUrl((int) $game['appId'], $game['iconHash']),
+                'header' => SteamApp::buildHeaderImageUrl((int) $game['appId']),
                 'value' => (float) $game[$valueColumn],
                 'valueLabel' => $valueLabel,
                 'meta' => $meta,
+                'players' => $this->faces($players[(int) $game['appId']] ?? []),
+                'playerCount' => count($players[(int) $game['appId']] ?? []),
             ];
         }
 
         return $rows;
+    }
+
+    /**
+     * The first players of a game as avatars: the site avatar, else the Steam avatar, else initials.
+     *
+     * @return array[] name, image, initials, label (name and playtime), hue (0-3, for themes)
+     */
+    protected function faces(array $players, int $max = 5): array
+    {
+        $users = $this->app->make(UserInfoRepository::class);
+        $faces = [];
+        foreach (array_slice($players, 0, $max) as $player) {
+            $name = (string) ($player['userName'] ?: $player['steamName']);
+            $user = $player['uID'] ? $users->getByID((int) $player['uID']) : null;
+            $image = $user && $user->hasAvatar() ? (string) $user->getUserAvatar()->getPath() : ($player['steamAvatar'] ?: null);
+            $faces[] = [
+                'name' => $name,
+                'image' => $image,
+                'initials' => mb_strtoupper(mb_substr(preg_replace('/[^\\p{L}\\p{N}]+/u', '', $name) ?: $name, 0, 2)),
+                'label' => $name . ': ' . $this->formatPlaytime((int) $player['minutes']),
+                // the same person keeps the same colour in every row
+                'hue' => crc32($name) % 4,
+            ];
+        }
+
+        return $faces;
     }
 
     protected function formatPlaytime(int $minutes): string

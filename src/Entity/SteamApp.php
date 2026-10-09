@@ -86,7 +86,13 @@ class SteamApp
 
     public function getHeaderImageUrl(): string
     {
-        return sprintf('https://cdn.cloudflare.steamstatic.com/steam/apps/%d/header.jpg', $this->appId);
+        return self::buildHeaderImageUrl((int) $this->appId);
+    }
+
+    /** the 460 × 215 capsule of the store page */
+    public static function buildHeaderImageUrl(int $appId): string
+    {
+        return sprintf('https://cdn.cloudflare.steamstatic.com/steam/apps/%d/header.jpg', $appId);
     }
 
     public function getStoreUrl(): string

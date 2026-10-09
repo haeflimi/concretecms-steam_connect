@@ -99,6 +99,34 @@
     color: var(--sl-ink-muted);
     font-size: .8125rem;
 }
+/* who played it: overlapping faces, then the count */
+.steam-leaderboard-players {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .125rem;
+}
+.steam-leaderboard-faces {
+    display: inline-flex;
+}
+.steam-leaderboard-face {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--sl-hue);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 0 0 2px var(--sl-surface);
+}
+.steam-leaderboard-face + .steam-leaderboard-face {
+    margin-left: -6px;
+}
 .steam-leaderboard-bar {
     grid-column: 3 / -1;
     display: block;

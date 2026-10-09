@@ -96,6 +96,53 @@ class GameStatistics
     }
 
     /**
+     * Who played these games, most playtime first: the faces next to the most played / most owned games. Same periods
+     * as getMostPlayed(); "owned" lists everybody who ever played a game they own.
+     *
+     * @param int[] $appIds
+     * @param string|DateTimeInterface $period "all", "two_weeks" or a start date
+     *
+     * @return array<int, array[]> per app ID: rows with uID, userName, steamName, steamAvatar, minutes
+     */
+    public function getPlayers(array $appIds, $period = 'all'): array
+    {
+        $appIds = array_values(array_unique(array_map('intval', $appIds)));
+        if (!$appIds) {
+            return [];
+        }
+        $params = ['apps' => $appIds];
+        $types = ['apps' => Connection::PARAM_INT_ARRAY];
+        if ($period instanceof DateTimeInterface) {
+            $minutes = 'g.playtimeForever - COALESCE(
+                (SELECT h.playtimeForever FROM SteamConnectPlaytimeHistory h
+                    WHERE h.steamId = g.steamId AND h.appId = g.appId AND h.recordedAt <= :since ORDER BY h.recordedAt DESC LIMIT 1),
+                (SELECT MIN(h.playtimeForever) FROM SteamConnectPlaytimeHistory h
+                    WHERE h.steamId = g.steamId AND h.appId = g.appId AND h.recordedAt > :since))';
+            $where = 'g.updatedAt > :since';
+            $params['since'] = $period->format('Y-m-d H:i:s');
+        } else {
+            $minutes = $period === 'two_weeks' ? 'g.playtime2Weeks' : 'g.playtimeForever';
+            $where = '1 = 1';
+        }
+        $players = [];
+        foreach ($this->db->fetchAllAssociative(
+            "SELECT * FROM (
+                SELECT g.appId, p.uID, u.uName AS userName, p.personaName AS steamName, p.avatarUrl AS steamAvatar, $minutes AS minutes
+                FROM SteamConnectOwnedGames g
+                INNER JOIN SteamConnectProfiles p ON p.steamId = g.steamId
+                LEFT JOIN Users u ON u.uID = p.uID
+                WHERE g.appId IN (:apps) AND $where
+            ) x WHERE x.minutes > 0 ORDER BY x.minutes DESC",
+            $params,
+            $types
+        ) as $row) {
+            $players[(int) $row['appId']][] = $row;
+        }
+
+        return $players;
+    }
+
+    /**
      * Games that have achievements somebody unlocked, for the game filter of the achievement leaderboard.
      *
      * @return array<int, string> names by app ID

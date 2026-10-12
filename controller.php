@@ -19,7 +19,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'steam_connect';
     protected $appVersionRequired = '9.0.0';
-    protected $pkgVersion = '1.5.0';
+    protected $pkgVersion = '1.6.0';
     protected $pkgAutoloaderRegistries = [
         'src' => 'SteamConnect',
     ];
@@ -45,6 +45,11 @@ class Controller extends Package implements ProviderAggregateInterface
     {
         $this->app->make(TaskManager::class)->extend('sync_steam_data', function () {
             return $this->app->make(SyncSteamDataController::class);
+        });
+
+        // terminal command "steam" (cli_mode package): sends the visitor into the Steam login
+        $this->app->make('director')->addListener('on_cli_mode_register_commands', static function ($event) {
+            $event->getRegistry()->register(\SteamConnect\CliMode\SteamCommand::make());
         });
     }
 

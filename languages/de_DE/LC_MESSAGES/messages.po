@@ -416,3 +416,21 @@ msgstr "Bitte konfiguriere zuerst einen Steam Web API Key im Steam-Anmeldetyp."
 #: steam_connect/src/Command/Task/SyncSteamDataController.php:76
 msgid "Syncing Steam data..."
 msgstr "Steam-Daten werden synchronisiert …"
+
+msgid "Sign in with %1$s or connect your %1$s account"
+msgstr "Mit %1$s anmelden oder dein %1$s-Konto verbinden"
+
+msgid "%s login is switched off on this site."
+msgstr "Die Anmeldung mit %s ist auf dieser Seite ausgeschaltet."
+
+msgid "Off to %s. You come back signed in."
+msgstr "Ab zu %s. Du kommst angemeldet zurück."
+
+msgid "Your %s account is already connected."
+msgstr "Dein %s-Konto ist schon verbunden."
+
+msgid "Off to %s to connect your account."
+msgstr "Ab zu %s, dein Konto verbinden."
+
+msgid "Not logged in: takes you to the %1$s login, you come back signed in. Logged in: connects your %1$s account to your club account."
+msgstr "Nicht angemeldet: führt dich zur Anmeldung bei %1$s, du kommst angemeldet zurück. Angemeldet: verbindet dein %1$s-Konto mit deinem Vereinskonto."

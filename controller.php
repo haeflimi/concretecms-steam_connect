@@ -19,7 +19,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'steam_connect';
     protected $appVersionRequired = '9.0.0';
-    protected $pkgVersion = '1.6.0';
+    protected $pkgVersion = '1.7.0';
     protected $pkgAutoloaderRegistries = [
         'src' => 'SteamConnect',
     ];
@@ -43,6 +43,10 @@ class Controller extends Package implements ProviderAggregateInterface
 
     public function on_start()
     {
+        // figures for the block "Event Figure" (community_event_manager): only asked for when that package is installed
+        $this->app->make('director')->addListener('on_event_figures_register', static function ($event) {
+            \SteamConnect\Figure\SteamFigures::register($event->getSubject());
+        });
         $this->app->make(TaskManager::class)->extend('sync_steam_data', function () {
             return $this->app->make(SyncSteamDataController::class);
         });

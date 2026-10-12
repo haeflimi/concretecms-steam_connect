@@ -434,3 +434,24 @@ msgstr "Ab zu %s, dein Konto verbinden."
 
 msgid "Not logged in: takes you to the %1$s login, you come back signed in. Logged in: connects your %1$s account to your club account."
 msgstr "Nicht angemeldet: führt dich zur Anmeldung bei %1$s, du kommst angemeldet zurück. Angemeldet: verbindet dein %1$s-Konto mit deinem Vereinskonto."
+
+msgid "Achievements unlocked"
+msgstr "Freigeschaltete Erfolge"
+
+msgid "Connected Steam accounts"
+msgstr "Verbundene Steam-Konten"
+
+msgid "Different games owned"
+msgstr "Verschiedene Spiele im Besitz"
+
+msgid "Game owned by the most members"
+msgstr "Spiel, das die meisten Mitglieder besitzen"
+
+msgid "Hours played (optionally one game)"
+msgstr "Gespielte Stunden (optional ein Spiel)"
+
+msgid "Most played game"
+msgstr "Meistgespieltes Spiel"
+
+msgid "Steam"
+msgstr "Steam"

@@ -13,6 +13,8 @@ use SteamConnect\Api\SteamWebApi;
  */
 class SteamDataSync
 {
+    use UpsertsRows;
+
     protected const DATE_FORMAT = 'Y-m-d H:i:s';
 
     /** @var Connection */
@@ -232,11 +234,7 @@ class SteamDataSync
                 'hasCommunityVisibleStats' => $app['hasStats'] ? 1 : 0,
                 'updatedAt' => $now->format(self::DATE_FORMAT),
             ];
-            if (isset($this->apps[$appId])) {
-                $this->db->update('SteamConnectApps', $values, ['appId' => $appId]);
-            } else {
-                $this->db->insert('SteamConnectApps', ['appId' => $appId] + $values);
-            }
+            $this->upsert('SteamConnectApps', ['appId' => $appId], $values);
             $this->apps[$appId] = $app;
         }
     }

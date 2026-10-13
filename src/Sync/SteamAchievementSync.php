@@ -16,6 +16,8 @@ use SteamConnect\Api\SteamWebApi;
  */
 class SteamAchievementSync
 {
+    use UpsertsRows;
+
     protected const DATE_FORMAT = 'Y-m-d H:i:s';
 
     /** Max. number of games per user and run, the rest is done in the next runs */
@@ -111,7 +113,7 @@ class SteamAchievementSync
                     $this->db->update('SteamConnectAchievements', $values, ['appId' => $appId, 'apiName' => $apiName]);
                     unset($existing[$apiName]);
                 } else {
-                    $this->db->insert('SteamConnectAchievements', ['appId' => $appId, 'apiName' => $apiName] + $values);
+                    $this->upsert('SteamConnectAchievements', ['appId' => $appId, 'apiName' => $apiName], $values);
                 }
             }
             // Achievements the developer removed

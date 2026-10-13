@@ -13,6 +13,8 @@ use DateTimeInterface;
  */
 class AchievementLeaderboard
 {
+    use GroupFilter;
+
     /**
      * 1 point per achievement plus up to 10 points for rarity: 1% unlock rate = +9.9, 90% = +1.
      * Achievements without a global rate (not loaded yet) count as 50%.
@@ -35,7 +37,7 @@ class AchievementLeaderboard
      */
     public function getRanking(?int $appId = null, ?DateTimeInterface $since = null, int $limit = 20): array
     {
-        $where = [];
+        $where = [$this->groupCondition('pa.steamId')];
         $params = [];
         if ($appId !== null) {
             $where[] = 'pa.appId = ?';
@@ -52,7 +54,7 @@ class AchievementLeaderboard
             FROM SteamConnectPlayerAchievements pa
             INNER JOIN SteamConnectProfiles p ON p.steamId = pa.steamId
             LEFT JOIN SteamConnectAchievements a ON a.appId = pa.appId AND a.apiName = pa.apiName
-            ' . ($where ? 'WHERE ' . implode(' AND ', $where) : '') . '
+            WHERE ' . implode(' AND ', $where) . '
             GROUP BY p.steamId, p.uID, p.personaName, p.avatarUrl
             ORDER BY points DESC, achievements DESC, rarest ASC
             LIMIT ' . max(1, $limit),
@@ -74,7 +76,7 @@ class AchievementLeaderboard
             FROM SteamConnectOwnedGames g
             INNER JOIN SteamConnectApps a ON a.appId = g.appId
             INNER JOIN SteamConnectProfiles p ON p.steamId = g.steamId
-            WHERE a.achievementCount > 0 AND g.achievementsUnlocked >= a.achievementCount
+            WHERE a.achievementCount > 0 AND g.achievementsUnlocked >= a.achievementCount AND ' . $this->groupCondition('g.steamId') . '
             GROUP BY p.steamId, p.uID, p.personaName, p.avatarUrl
             ORDER BY perfectGames DESC
             LIMIT ' . max(1, $limit)

@@ -3,6 +3,7 @@
 namespace Concrete\Package\SteamConnect\Block\SteamLeaderboard;
 
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\User\Group\GroupList;
 use Concrete\Core\User\UserInfoRepository;
 use DateTime;
 use DateTimeInterface;
@@ -37,6 +38,8 @@ class Controller extends BlockController
     public $appId;
     /** @var int */
     public $maxItems;
+    /** @var int only the Steam accounts of the members of this group, 0 = all linked users */
+    public $groupID;
 
     public function getBlockTypeName()
     {
@@ -56,6 +59,7 @@ class Controller extends BlockController
         $this->set('sinceDate', null);
         $this->set('appId', 0);
         $this->set('maxItems', 10);
+        $this->set('groupID', 0);
         $this->setFormOptions();
     }
 
@@ -89,6 +93,7 @@ class Controller extends BlockController
             'sinceDate' => $since ? $since->format('Y-m-d') : null,
             'appId' => $leaderboard === 'achievements' ? (int) ($args['appId'] ?? 0) : 0,
             'maxItems' => min(100, max(1, (int) ($args['maxItems'] ?? 10))),
+            'groupID' => max(0, (int) ($args['groupID'] ?? 0)),
         ]);
     }
 
@@ -101,7 +106,7 @@ class Controller extends BlockController
         switch ($this->leaderboard) {
             case 'perfect_games':
                 $rows = $this->playerRows(
-                    $this->app->make(AchievementLeaderboard::class)->getPerfectGamesRanking($limit),
+                    $this->achievementLeaderboard()->getPerfectGamesRanking($limit),
                     'perfectGames',
                     function ($row) use ($numbers) {
                         return [t2('%s perfect game', '%s perfect games', (int) $row['perfectGames'], $numbers->format($row['perfectGames'])), ''];
@@ -111,7 +116,7 @@ class Controller extends BlockController
             case 'most_played':
                 $period = $this->period === 'all' ? 'all' : ($this->period === '14' ? 'two_weeks' : $since);
                 $rows = $this->gameRows(
-                    $this->app->make(GameStatistics::class)->getMostPlayed($period, $limit),
+                    $this->gameStatistics()->getMostPlayed($period, $limit),
                     'minutes',
                     function ($row) use ($numbers) {
                         return [$this->formatPlaytime((int) $row['minutes']), t2('%s player', '%s players', (int) $row['players'], $numbers->format($row['players']))];
@@ -120,10 +125,11 @@ class Controller extends BlockController
                 );
                 break;
             case 'most_owned':
-                $statistics = $this->app->make(GameStatistics::class);
+                $statistics = $this->gameStatistics();
                 $libraries = $statistics->getLibraryCount();
+                $ownedGames = $statistics->getMostOwned($limit);
                 $rows = $this->gameRows(
-                    $statistics->getMostOwned($limit),
+                    $ownedGames,
                     'owners',
                     function ($row) use ($numbers, $libraries) {
                         return [
@@ -131,12 +137,13 @@ class Controller extends BlockController
                             t('%s played in total', $this->formatPlaytime((int) $row['minutes'])),
                         ];
                     },
-                    'all'
+                    null,
+                    $statistics->getOwners(array_column($ownedGames, 'appId'))
                 );
                 break;
             default:
                 $rows = $this->playerRows(
-                    $this->app->make(AchievementLeaderboard::class)->getRanking((int) $this->appId ?: null, $since, $limit),
+                    $this->achievementLeaderboard()->getRanking((int) $this->appId ?: null, $since, $limit),
                     'points',
                     function ($row) use ($numbers) {
                         return [
@@ -215,10 +222,13 @@ class Controller extends BlockController
     /**
      * @param callable $labels returns [value label, meta text] for a row
      * @param string|DateTimeInterface|null $playersPeriod adds the faces of who played the game in that period
+     * @param array<int, array[]>|null $players instead of the period: the people per app ID (e.g. the owners)
      */
-    protected function gameRows(array $games, string $valueColumn, callable $labels, $playersPeriod = null): array
+    protected function gameRows(array $games, string $valueColumn, callable $labels, $playersPeriod = null, ?array $players = null): array
     {
-        $players = $playersPeriod === null ? [] : $this->app->make(GameStatistics::class)->getPlayers(array_column($games, 'appId'), $playersPeriod);
+        if ($players === null) {
+            $players = $playersPeriod === null ? [] : $this->gameStatistics()->getPlayers(array_column($games, 'appId'), $playersPeriod);
+        }
         $rows = [];
         $rank = 0;
         $previous = null;
@@ -264,7 +274,7 @@ class Controller extends BlockController
                 'name' => $name,
                 'image' => $image,
                 'initials' => mb_strtoupper(mb_substr(preg_replace('/[^\\p{L}\\p{N}]+/u', '', $name) ?: $name, 0, 2)),
-                'label' => $name . ': ' . $this->formatPlaytime((int) $player['minutes']),
+                'label' => $name . ': ' . $this->formatPersonValue($player),
                 // the same person keeps the same colour in every row
                 'hue' => crc32($name) % 4,
             ];
@@ -274,7 +284,7 @@ class Controller extends BlockController
     }
 
     /**
-     * Everybody who played a game with their playtime, most first (for a list on hover).
+     * Everybody who played (or owns) a game with their playtime (or library size), most first (for a list on hover).
      *
      * @return array[] name, time
      */
@@ -282,10 +292,22 @@ class Controller extends BlockController
     {
         $roster = [];
         foreach (array_slice($players, 0, $max) as $player) {
-            $roster[] = ['name' => (string) ($player['userName'] ?: $player['steamName']), 'time' => $this->formatPlaytime((int) $player['minutes'])];
+            $roster[] = ['name' => (string) ($player['userName'] ?: $player['steamName']), 'time' => $this->formatPersonValue($player)];
         }
 
         return $roster;
+    }
+
+    /**
+     * A person's value in a game list: the size of their library (owners) or their playtime (players).
+     */
+    protected function formatPersonValue(array $player): string
+    {
+        if (isset($player['games'])) {
+            return t2('%s game', '%s games', (int) $player['games'], $this->app->make('helper/number')->format((int) $player['games']));
+        }
+
+        return $this->formatPlaytime((int) $player['minutes']);
     }
 
     protected function formatPlaytime(int $minutes): string
@@ -309,6 +331,25 @@ class Controller extends BlockController
         $this->set('leaderboardOptions', $this->getLeaderboardOptions());
         $this->set('periodOptions', $this->getPeriodOptions());
         $this->set('gameOptions', [0 => t('All games')] + $this->app->make(GameStatistics::class)->getGamesWithAchievements());
+        $groups = [0 => t('All linked users')];
+        $list = new GroupList();
+        $list->includeAllGroups();
+        foreach ($list->getResults() as $group) {
+            if (!in_array((int) $group->getGroupID(), [GUEST_GROUP_ID, REGISTERED_GROUP_ID], true)) {
+                $groups[(int) $group->getGroupID()] = $group->getGroupDisplayName(false);
+            }
+        }
+        $this->set('groupOptions', $groups);
+    }
+
+    protected function gameStatistics(): GameStatistics
+    {
+        return $this->app->make(GameStatistics::class)->forGroup((int) $this->groupID);
+    }
+
+    protected function achievementLeaderboard(): AchievementLeaderboard
+    {
+        return $this->app->make(AchievementLeaderboard::class)->forGroup((int) $this->groupID);
     }
 
     protected function getLeaderboardOptions(): array

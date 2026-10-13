@@ -19,7 +19,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'steam_connect';
     protected $appVersionRequired = '9.0.0';
-    protected $pkgVersion = '1.7.0';
+    protected $pkgVersion = '1.8.0';
     protected $pkgAutoloaderRegistries = [
         'src' => 'SteamConnect',
     ];

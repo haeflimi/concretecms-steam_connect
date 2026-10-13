@@ -13,6 +13,8 @@ defined('C5_EXECUTE') or die('Access Denied.');
  * @var array $leaderboardOptions
  * @var array $periodOptions
  * @var array $gameOptions
+ * @var int $groupID
+ * @var array $groupOptions
  */
 ?>
 <div class="form-group">
@@ -37,6 +39,11 @@ defined('C5_EXECUTE') or die('Access Denied.');
     <?= $form->label('sinceDate', t('Start date')) ?>
     <input type="date" id="sinceDate" name="sinceDate" class="form-control" value="<?= h((string) $sinceDate) ?>">
     <div class="form-text"><?= t('E.g. the first day of a LAN party.') ?></div>
+</div>
+<div class="form-group">
+    <?= $form->label('groupID', t('Group')) ?>
+    <?= $form->select('groupID', $groupOptions, (int) $groupID) ?>
+    <div class="form-text"><?= t('Only count the Steam accounts of the direct members of this group.') ?></div>
 </div>
 <div class="form-group">
     <?= $form->label('maxItems', t('Number of entries')) ?>

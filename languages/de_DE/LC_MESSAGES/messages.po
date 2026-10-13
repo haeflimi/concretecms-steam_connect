@@ -455,3 +455,22 @@ msgstr "Meistgespieltes Spiel"
 
 msgid "Steam"
 msgstr "Steam"
+
+#: steam_connect/blocks/steam_leaderboard/controller.php
+#, php-format
+msgid "%s game"
+msgid_plural "%s games"
+msgstr[0] "%s Spiel"
+msgstr[1] "%s Spiele"
+
+#: steam_connect/blocks/steam_leaderboard/form.php
+msgid "Group"
+msgstr "Gruppe"
+
+#: steam_connect/blocks/steam_leaderboard/form.php
+msgid "All linked users"
+msgstr "Alle verknüpften Benutzer"
+
+#: steam_connect/blocks/steam_leaderboard/form.php
+msgid "Only count the Steam accounts of the direct members of this group."
+msgstr "Nur die Steam-Konten der direkten Mitglieder dieser Gruppe zählen."

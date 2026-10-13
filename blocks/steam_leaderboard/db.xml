@@ -23,5 +23,9 @@
             <unsigned/>
             <default value="10"/>
         </field>
+        <field name="groupID" type="I">
+            <unsigned/>
+            <default value="0"/>
+        </field>
     </table>
 </schema>

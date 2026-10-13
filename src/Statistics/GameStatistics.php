@@ -11,6 +11,8 @@ use DateTimeInterface;
  */
 class GameStatistics
 {
+    use GroupFilter;
+
     /** @var Connection */
     protected $db;
 
@@ -24,7 +26,7 @@ class GameStatistics
      */
     public function getLibraryCount(): int
     {
-        return (int) $this->db->fetchOne('SELECT COUNT(*) FROM SteamConnectProfiles WHERE gameDetailsVisible = 1');
+        return (int) $this->db->fetchOne('SELECT COUNT(*) FROM SteamConnectProfiles p WHERE p.gameDetailsVisible = 1 AND ' . $this->groupCondition('p.steamId'));
     }
 
     /**
@@ -35,10 +37,42 @@ class GameStatistics
         return $this->db->fetchAllAssociative(
             'SELECT a.appId, a.name, a.iconHash, COUNT(*) AS owners, SUM(g.playtimeForever > 0) AS players, SUM(g.playtimeForever) AS minutes
             FROM SteamConnectOwnedGames g INNER JOIN SteamConnectApps a ON a.appId = g.appId
+            WHERE ' . $this->groupCondition('g.steamId') . '
             GROUP BY a.appId, a.name, a.iconHash
             ORDER BY owners DESC, minutes DESC
             LIMIT ' . max(1, $limit)
         );
+    }
+
+    /**
+     * Everybody who owns one of the games, ranked by the size of their library (for the most owned games).
+     *
+     * @param int[] $appIds
+     *
+     * @return array<int, array[]> per app ID: rows with uID, userName, steamName, steamAvatar, games (owned in total)
+     */
+    public function getOwners(array $appIds): array
+    {
+        $appIds = array_values(array_unique(array_map('intval', $appIds)));
+        if (!$appIds) {
+            return [];
+        }
+        $owners = [];
+        foreach ($this->db->fetchAllAssociative(
+            'SELECT g.appId, p.uID, u.uName AS userName, p.personaName AS steamName, p.avatarUrl AS steamAvatar, l.games
+            FROM SteamConnectOwnedGames g
+            INNER JOIN SteamConnectProfiles p ON p.steamId = g.steamId
+            INNER JOIN (SELECT steamId, COUNT(*) AS games FROM SteamConnectOwnedGames GROUP BY steamId) l ON l.steamId = g.steamId
+            LEFT JOIN Users u ON u.uID = p.uID
+            WHERE g.appId IN (:apps) AND ' . $this->groupCondition('g.steamId') . '
+            ORDER BY l.games DESC, p.personaName ASC',
+            ['apps' => $appIds],
+            ['apps' => Connection::PARAM_INT_ARRAY]
+        ) as $row) {
+            $owners[(int) $row['appId']][] = $row;
+        }
+
+        return $owners;
     }
 
     /**
@@ -57,7 +91,7 @@ class GameStatistics
         return $this->db->fetchAllAssociative(
             "SELECT a.appId, a.name, a.iconHash, SUM($column) AS minutes, SUM($column > 0) AS players
             FROM SteamConnectOwnedGames g INNER JOIN SteamConnectApps a ON a.appId = g.appId
-            WHERE $column > 0
+            WHERE $column > 0 AND {$this->groupCondition('g.steamId')}
             GROUP BY a.appId, a.name, a.iconHash
             ORDER BY minutes DESC
             LIMIT " . max(1, $limit)
@@ -84,7 +118,7 @@ class GameStatistics
                         WHERE h.steamId = g.steamId AND h.appId = g.appId AND h.recordedAt > :since)
                 ) AS minutes
                 FROM SteamConnectOwnedGames g
-                WHERE g.updatedAt > :since
+                WHERE g.updatedAt > :since AND ' . $this->groupCondition('g.steamId') . '
             ) p
             INNER JOIN SteamConnectApps a ON a.appId = p.appId
             WHERE p.minutes > 0
@@ -131,7 +165,7 @@ class GameStatistics
                 FROM SteamConnectOwnedGames g
                 INNER JOIN SteamConnectProfiles p ON p.steamId = g.steamId
                 LEFT JOIN Users u ON u.uID = p.uID
-                WHERE g.appId IN (:apps) AND $where
+                WHERE g.appId IN (:apps) AND $where AND {$this->groupCondition('g.steamId')}
             ) x WHERE x.minutes > 0 ORDER BY x.minutes DESC",
             $params,
             $types

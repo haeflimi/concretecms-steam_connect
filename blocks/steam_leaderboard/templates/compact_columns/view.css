@@ -1,0 +1,59 @@
+/*
+ * Compact columns: up to three columns of tighter rows, each column read top to bottom. Builds on ../../view.css.
+ */
+.steam-leaderboard-columns .steam-leaderboard-list {
+    columns: 17rem 3;
+    column-gap: 0;
+    column-rule: 1px solid var(--sl-border);
+    border-top: 1px solid var(--sl-border);
+}
+.steam-leaderboard-columns .steam-leaderboard-row {
+    break-inside: avoid;
+    grid-template-columns: 1.5rem 32px minmax(0, 1fr) auto;
+    gap: .125rem .5rem;
+    padding: .375rem .75rem;
+    border-top: 0;
+    border-bottom: 1px solid var(--sl-border);
+}
+.steam-leaderboard-columns .steam-leaderboard-image {
+    width: 32px;
+    height: 32px;
+}
+.steam-leaderboard-columns .steam-leaderboard-top .steam-leaderboard-rank {
+    font-size: 1rem;
+}
+.steam-leaderboard-columns .steam-leaderboard-name {
+    font-size: .9375rem;
+}
+.steam-leaderboard-columns .steam-leaderboard-meta {
+    font-size: .75rem;
+}
+.steam-leaderboard-columns .steam-leaderboard-face {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+}
+.steam-leaderboard-columns .steam-leaderboard-face + .steam-leaderboard-face {
+    margin-left: -5px;
+}
+.steam-leaderboard-columns .steam-leaderboard-value {
+    font-size: .875rem;
+}
+.steam-leaderboard-columns .steam-leaderboard-bar {
+    height: 4px;
+}
+/* one line of meta: at most three faces, the text cut with an ellipsis (the full text is in the row's tooltip) */
+.steam-leaderboard-columns .steam-leaderboard-meta {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.steam-leaderboard-columns .steam-leaderboard-faces {
+    margin-right: .375rem;
+    vertical-align: middle;
+}
+.steam-leaderboard-columns .steam-leaderboard-face:nth-child(n+4) {
+    display: none;
+}

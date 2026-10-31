@@ -11,6 +11,7 @@ use Concrete\Core\Package\Package;
 use SteamConnect\Command\Task\SyncSteamDataController;
 use SteamConnect\Install\LegacyPackageCleanup;
 use SteamConnect\SteamConfig;
+use SteamConnect\Sync\SteamDataSync;
 use Throwable;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -19,7 +20,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'steam_connect';
     protected $appVersionRequired = '9.0.0';
-    protected $pkgVersion = '1.8.2';
+    protected $pkgVersion = '1.8.3';
     protected $pkgAutoloaderRegistries = [
         'src' => 'SteamConnect',
     ];
@@ -74,6 +75,7 @@ class Controller extends Package implements ProviderAggregateInterface
         $this->installAuthenticationType($this->getPackageEntity());
         $this->installContent();
         $this->migrateClubSettings();
+        $this->app->make(SteamDataSync::class)->removeHiddenPlaytimeHistory();
     }
 
     public function uninstall()

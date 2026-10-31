@@ -172,6 +172,9 @@ class SteamDataSync
         foreach ($this->db->fetchAllAssociative('SELECT appId, playtimeForever, playtime2Weeks, lastPlayedAt FROM SteamConnectOwnedGames WHERE steamId = ?', [$steamId]) as $row) {
             $existing[(int) $row['appId']] = $row;
         }
+        // "Always keep my total playtime private": Steam reports 0 minutes for every game. Recording these zeros
+        // would make the whole lifetime playtime count as played in a period once the user shows it again.
+        $playtimeHidden = array_sum(array_column($games, 'playtime_forever')) === 0;
 
         foreach ($games as $game) {
             $appId = (int) $game['appid'];
@@ -192,7 +195,7 @@ class SteamDataSync
                 $this->db->update('SteamConnectOwnedGames', ['updatedAt' => $nowString] + $values, ['steamId' => $steamId, 'appId' => $appId]);
             }
 
-            if ($old === null || (int) $old['playtimeForever'] !== $values['playtimeForever']) {
+            if (!$playtimeHidden && ($old === null || (int) $old['playtimeForever'] !== $values['playtimeForever'])) {
                 $this->db->insert('SteamConnectPlaytimeHistory', [
                     'steamId' => $steamId,
                     'appId' => $appId,
@@ -207,6 +210,33 @@ class SteamDataSync
             $this->db->delete('SteamConnectOwnedGames', ['steamId' => $steamId, 'appId' => $appId]);
             $this->db->delete('SteamConnectPlayerAchievements', ['steamId' => $steamId, 'appId' => $appId]);
         }
+    }
+
+    /**
+     * Remove the playtime history rows written while a user's playtime was hidden (up to 1.8.2 the zeros were
+     * recorded): syncs at which the user's recorded total over all games was 0.
+     *
+     * @return int number of removed rows
+     */
+    public function removeHiddenPlaytimeHistory(): int
+    {
+        $removed = 0;
+        foreach ($this->db->fetchAllAssociative(
+            'SELECT s.steamId, s.recordedAt
+            FROM (SELECT DISTINCT steamId, recordedAt FROM SteamConnectPlaytimeHistory) s
+            WHERE NOT EXISTS (
+                SELECT 1 FROM SteamConnectPlaytimeHistory h
+                WHERE h.steamId = s.steamId AND h.recordedAt <= s.recordedAt AND h.playtimeForever > 0
+                    AND NOT EXISTS (
+                        SELECT 1 FROM SteamConnectPlaytimeHistory n
+                        WHERE n.steamId = h.steamId AND n.appId = h.appId AND n.recordedAt > h.recordedAt AND n.recordedAt <= s.recordedAt
+                    )
+            )'
+        ) as $sync) {
+            $removed += $this->db->delete('SteamConnectPlaytimeHistory', ['steamId' => $sync['steamId'], 'recordedAt' => $sync['recordedAt']]);
+        }
+
+        return $removed;
     }
 
     protected function saveApps(array $games, DateTime $now): void

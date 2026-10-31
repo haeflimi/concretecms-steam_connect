@@ -229,6 +229,8 @@ class Controller extends BlockController
         if ($players === null) {
             $players = $playersPeriod === null ? [] : $this->gameStatistics()->getPlayers(array_column($games, 'appId'), $playersPeriod);
         }
+        // the compact columns show a random mix of up to 10 people per game, so not every row has the same faces
+        $mixed = preg_replace('/\.php$/', '', (string) ($this->getBlockObject() ? $this->getBlockObject()->getBlockFilename() : '')) === 'compact_columns';
         $rows = [];
         $rank = 0;
         $previous = null;
@@ -248,7 +250,7 @@ class Controller extends BlockController
                 'value' => (float) $game[$valueColumn],
                 'valueLabel' => $valueLabel,
                 'meta' => $meta,
-                'players' => $this->faces($players[(int) $game['appId']] ?? []),
+                'players' => $this->faces($players[(int) $game['appId']] ?? [], $mixed ? 10 : 5, $mixed),
                 'playerCount' => count($players[(int) $game['appId']] ?? []),
                 'roster' => $this->roster($players[(int) $game['appId']] ?? []),
             ];
@@ -258,12 +260,16 @@ class Controller extends BlockController
     }
 
     /**
-     * The first players of a game as avatars: the site avatar, else the Steam avatar, else initials.
+     * The first players of a game (or a random choice of them, in random order) as avatars: the site avatar, else the
+     * Steam avatar, else initials.
      *
      * @return array[] name, image, initials, label (name and playtime), hue (0-3, for themes)
      */
-    protected function faces(array $players, int $max = 5): array
+    protected function faces(array $players, int $max = 5, bool $random = false): array
     {
+        if ($random) {
+            shuffle($players);
+        }
         $users = $this->app->make(UserInfoRepository::class);
         $faces = [];
         foreach (array_slice($players, 0, $max) as $player) {

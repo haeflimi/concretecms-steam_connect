@@ -29,12 +29,11 @@
     font-size: .75rem;
 }
 .steam-leaderboard-columns .steam-leaderboard-face {
+    flex: none;
     width: 20px;
     height: 20px;
     font-size: 9px;
-}
-.steam-leaderboard-columns .steam-leaderboard-face + .steam-leaderboard-face {
-    margin-left: -5px;
+    border-radius: var(--bs-border-radius-sm, .25rem);
 }
 .steam-leaderboard-columns .steam-leaderboard-value {
     font-size: .875rem;
@@ -42,7 +41,7 @@
 .steam-leaderboard-columns .steam-leaderboard-bar {
     height: 4px;
 }
-/* one line of meta: at most three faces, the text cut with an ellipsis (the full text is in the row's tooltip) */
+/* game rows: one line of square faces (as many as fit), no playtime text; other rows keep their meta on one line */
 .steam-leaderboard-columns .steam-leaderboard-meta {
     display: block;
     min-width: 0;
@@ -50,10 +49,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.steam-leaderboard-columns .steam-leaderboard-faces {
-    margin-right: .375rem;
-    vertical-align: middle;
+.steam-leaderboard-columns .steam-leaderboard-players {
+    display: flex;
+    overflow: hidden;
 }
-.steam-leaderboard-columns .steam-leaderboard-face:nth-child(n+4) {
-    display: none;
+.steam-leaderboard-columns .steam-leaderboard-faces {
+    flex-wrap: nowrap;
+}
+.steam-leaderboard-columns .steam-leaderboard-face + .steam-leaderboard-face {
+    margin-left: -3px;
 }

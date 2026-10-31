@@ -7,6 +7,7 @@ defined('C5_EXECUTE') or die('Access Denied.');
  * @var string $subtitle
  * @var array[] $rows rank, name, url, image, value, valueLabel, meta; game rows also appId, header (store capsule image), players (name, image, initials, label, hue), playerCount, roster (name, time; up to 30)
  * @var string|null $variant set by templates that reuse this markup (e.g. "columns" → .steam-leaderboard-columns)
+ * @var bool|null $facesOnly templates: the faces of a game without the meta text next to them
  */
 
 $max = $rows ? max(array_column($rows, 'value')) : 0;
@@ -48,7 +49,7 @@ $max = $rows ? max(array_column($rows, 'value')) : 0;
                                         <?php } ?>
                                     <?php } ?>
                                 </span>
-                                <?= h($row['meta']) ?>
+                                <?= empty($facesOnly) ? h($row['meta']) : '' ?>
                             </span>
                         <?php } elseif ($row['meta'] !== '') { ?>
                             <span class="steam-leaderboard-meta"><?= h($row['meta']) ?></span>

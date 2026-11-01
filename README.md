@@ -39,6 +39,8 @@ type now.
 - Register new Users using Steam Login
 - Login existing Users using Steam Login
 - Connect Steam Account to concreteCMS account via User Profile
+- "Who plays what" for the block Event Activity (community_event_manager): the game linked users are in right now,
+  from GetPlayerSummaries (needs the API key and public game details; cached for a minute)
 
 ## planned Features ##
 

@@ -14,4 +14,6 @@ return [
     // norwegian, finnish, polish, czech, hungarian, romanian, russian, ukrainian, turkish, greek,
     // japanese, koreana, schinese, tchinese, thai, vietnamese, bulgarian, arabic
     'achievement_language' => 'english',
+    // Block "Event Activity" (community_event_manager): random games instead of the Steam API, for development only
+    'activity_demo' => false,
 ];
